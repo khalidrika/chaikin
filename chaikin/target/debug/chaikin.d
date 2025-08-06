@@ -1,1 +1,1 @@
-/home/ktrichin/chaikin/chaikin/target/debug/chaikin: /home/ktrichin/chaikin/chaikin/src/lib.rs /home/ktrichin/chaikin/chaikin/src/main.rs
+/home/ktrichin/Desktop/chaikin/target/debug/chaikin: /home/ktrichin/Desktop/chaikin/src/app.rs /home/ktrichin/Desktop/chaikin/src/main.rs

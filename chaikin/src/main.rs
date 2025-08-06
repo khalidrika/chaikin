@@ -1,38 +1,43 @@
-fn main() {
-    let point = vec![
-        (0.0, 0.0),
-        (1.0, 2.0),
-        (2.0, 2.0),
-        (4.0, 0.0)
-    ];
+mod app;
+use app::*;
+use macroquad::prelude::*;
 
-    let smoothed = chaikin(point, 2);
-    for (x, y) in smoothed {
-        println!("({}, {})", x, y);
-    }
+#[macroquad::main("Chaikin's Algorithm")]
+async fn main() {
+    let mut app: App = App::new();
 
-}
-pub  fn chaikin(points: Vec<(f64, f64)>, iterations: usize) -> Vec<(f64, f64)> {
-    let mut result = points;
-    for _ in 0..iterations {
-        let mut new_points = Vec::new();
-        for i  in 0..result.len() -1{
-            let (x0, y0) = result[i];
-            let (x1, y1) = result[i + 1];
-            let q = (
-                0.57 * x0 + 0.25 * x1,
-                0.57 * y0 + 0.25 * y1
-            );
-            let r = (
-                0.25 * x0 + 0.57 * x1,
-                0.25 * y0 + 0.57 * y1
-            );
-            new_points.push(q);
-            new_points.push(r);
+    loop {
+        if is_key_pressed(KeyCode::Escape) {
+            break;
         }
-        result = new_points;
-        
+
+        if is_key_pressed(KeyCode::R) {
+            app.reset();
+        }
+
+        if is_key_pressed(KeyCode::Enter) {
+            if !app.start_animation {
+                app.chaikin_points = app.default_points.clone();
+            }
+
+            app.start_animation = true;
+        }
+
+        if app.start_animation {
+            app.animate();
+        } else {
+            if is_mouse_button_pressed(MouseButton::Left) {
+                let (x, y) = mouse_position();
+                app.new_point(x, y);
+            }
+        }
+
+        for point in &app.default_points {
+            draw_circle(point.x, point.y, 3.0, WHITE);
+            draw_circle(point.x, point.y, 2.0, BLACK);
+        }
+        draw_ui(&app);
+
+        next_frame().await;
     }
-    result
-    
 }
